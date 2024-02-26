@@ -97,17 +97,37 @@ app.get("/roadmap", async (req, res) => {
 
   //console.log(sorted_items);
 
+  function to_string_date(unix_time) {
+    const date = new Date(unix_time * 1000);
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+
+    return date.toLocaleDateString("en-US", options);
+  }
+
   const html =
-    '<div class="grid grid-flow-row auto-rows-max">' +
+    '<div class="grid grid-flow-row auto-rows-max max-w-lg m-auto">' +
     top_level_items
       .map((item) => {
         const subitems = items
           .filter((i) => i.parent_id === item.id)
-          .sort((i1, i2) => i1.date_delivered > i2.date_delivered);
+          .map((i) => ({
+            ...i,
+            date_delivered_string: to_string_date(i.date_delivered),
+          }))
+          .sort((i1, i2) => i1.date_delivered - i2.date_delivered);
 
         var result = `<div>${item.name}</div>`;
         result += subitems
-          .map((i) => `<div class="ml-20">${i.name}</div>`)
+          .map(
+            (
+              i
+            ) => `<div class="ml-10">${i.name} (${i.date_delivered_string})</div>
+          <div class="ml-20">${i.desc}</div>`
+          )
           .join("");
 
         return result;
