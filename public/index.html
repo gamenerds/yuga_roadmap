@@ -9,14 +9,28 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="scripts/client.js"></script>
     <title>Yuga Roadmap Status (Unofficial)</title>
   </head>
   <body class="min-h-screen flex items-center justify-center">
-    <div
-      hx-trigger="load"
-      hx-swap="outerHTML"
-      hx-get="/roadmap"
-      class="mb-4"
-    ></div>
+    <div class="grid grid-flow-row auto-rows-max max-w-lg m-auto">
+      <div class="break-after-right">
+        <input
+          type="search"
+          id="search"
+          name="search"
+          class="border border-gray-600 bg-gray-800 p-2 rounded-lg max-w-fit mb-5 break-after-all text-white"
+          placeholder="Start typing to filter/search..."
+          onkeyup="search()"
+        />
+      </div>
+      <div
+        id="results"
+        isParent="true"
+        hx-trigger="load"
+        hx-swap="innerHTML"
+        hx-get="/roadmap"
+      ></div>
+    </div>
   </body>
 </html>

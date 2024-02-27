@@ -13,47 +13,41 @@ app.use(express.json());
 
 // Handle GET request to get all roadmap items
 app.get("/roadmap", async (req, res) => {
-  const items = [
+  const all_items = [
     {
       id: 1,
       name: "Apes",
       desc: "lala",
-      parent_id: null,
       thumbnail: "",
     },
     {
       id: 2,
       name: "Otherside",
       desc: "lala",
-      parent_id: null,
       thumbnail: "",
     },
     {
       id: 3,
       name: "Meebits",
       desc: "lala",
-      parent_id: null,
       thumbnail: "",
     },
     {
       id: 4,
       name: "Punks",
       desc: "lala",
-      parent_id: null,
       thumbnail: "",
     },
     {
       id: 5,
       name: "Moonbirds",
       desc: "kakaw",
-      parent_id: null,
       thumbnail: "",
     },
     {
       id: 6,
       name: "Art",
       desc: "viva la artsua (sips espresso)",
-      parent_id: null,
       thumbnail: "",
     },
     {
@@ -91,11 +85,10 @@ app.get("/roadmap", async (req, res) => {
 
   //   console.log(items);
 
-  const sorted_items = items.sort((i1, i2) => i1.id - i2.id);
-  //   console.log(sorted_items);
-  const top_level_items = items.filter((i) => i.parent_id === null);
-
-  //console.log(sorted_items);
+  //const all_items_sorted = items
+  const top_level_items = all_items
+    .filter((i) => !i.parent_id)
+    .sort((i1, i2) => i1.id - i2.id);
 
   function to_string_date(unix_time) {
     const date = new Date(unix_time * 1000);
@@ -108,11 +101,16 @@ app.get("/roadmap", async (req, res) => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  const html =
-    '<div class="grid grid-flow-row auto-rows-max max-w-lg m-auto">' +
-    top_level_items
+  function html_for_items(items) {
+    return items
       .map((item) => {
-        const subitems = items
+        // generate id for html elements
+        const id_as_string =
+          item.parent_id === undefined
+            ? String(item.id)
+            : `${item.id}-${item.parent_id}`;
+
+        const subitems = all_items
           .filter((i) => i.parent_id === item.id)
           .map((i) => ({
             ...i,
@@ -120,20 +118,33 @@ app.get("/roadmap", async (req, res) => {
           }))
           .sort((i1, i2) => i1.date_delivered - i2.date_delivered);
 
-        var result = `<div>${item.name}</div>`;
-        result += subitems
-          .map(
-            (
-              i
-            ) => `<div class="ml-10">${i.name} (${i.date_delivered_string})</div>
-          <div class="ml-20">${i.desc}</div>`
-          )
-          .join("");
+        const is_parent =
+          subitems.length !== 0 ||
+          item.parent_id === undefined ||
+          item.parent_id === null;
+
+        // generate html
+        var result = `<div id="${id_as_string}" 
+              isParent="${is_parent}">`;
+
+        if (is_parent) {
+          result += `<div id="${id_as_string}-name" class="searchable">${item.name}</div>`;
+          result += html_for_items(subitems);
+        } else {
+          result += `<div id="${id_as_string}-name" class="ml-10 searchable">${item.name} (${item.date_delivered_string})</div>`;
+          result += `<div id="${id_as_string}-desc" class="ml-20 searchable">${item.desc}</div>`;
+        }
+
+        result += "</div>"; // ending tag to the div grid
 
         return result;
       })
-      .join("") +
-    "</div>";
+      .join("");
+  }
+
+  const html = html_for_items(top_level_items);
+
+  //console.log(html);
 
   res.send(html);
 });
