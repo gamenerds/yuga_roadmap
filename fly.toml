@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for yuga-roadmap-bun on 2024-02-28T10:34:09+07:00
+# fly.toml app configuration file generated for yuga-roadmap on 2024-02-28T15:08:09+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'yuga-roadmap-bun'
+app = 'yuga-roadmap'
 primary_region = 'sin'
 
 [build]

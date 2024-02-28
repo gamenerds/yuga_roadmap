@@ -5,9 +5,9 @@
   "main": "index.html",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch ./src/server.js",
-    "build": "bun build ./src/server.js --target bun",
-    "start": "NODE_ENV=production bun ./src/server.js",
+    "dev": "bun --watch src/server.js",
+    "build": "bun build src/server.js --target bun",
+    "start": "NODE_ENV=production bun src/server.js",
     "test": "bun test"
   },
   "keywords": [],
