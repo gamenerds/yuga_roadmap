@@ -2,12 +2,12 @@
   "name": "yuga_roadmap",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "main.tsx",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/server.js",
-    "build": "bun build src/server.js --target bun",
-    "start": "NODE_ENV=production bun src/server.js",
+    "dev": "bun --watch main.tsx",
+    "build": "bun build main.tsx --target bun",
+    "start": "NODE_ENV=production bun main.tsx",
     "test": "bun test"
   },
   "keywords": [],
@@ -21,6 +21,8 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.2"
+    "@flydotio/dockerfile": "^0.5.2",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11"
   }
 }

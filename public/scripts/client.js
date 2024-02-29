@@ -40,7 +40,7 @@ function search_recursive(e, term) {
         }
     })
         .filter(not_empty);
-    const isParent = e.attributes.getNamedItem("isParent")?.value;
+    const isParent = e.attributes.getNamedItem("is-parent")?.value;
     if (Boolean(isParent)) {
         // if we're a parent, we're visible if any children are visible
         children.forEach((c) => {

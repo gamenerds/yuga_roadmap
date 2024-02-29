@@ -51,7 +51,7 @@ function search_recursive(e: HTMLElement, term: string): boolean {
     })
     .filter(not_empty);
 
-  const isParent = e.attributes.getNamedItem("isParent")?.value;
+  const isParent = e.attributes.getNamedItem("is-parent")?.value;
 
   if (Boolean(isParent)) {
     // if we're a parent, we're visible if any children are visible
@@ -69,11 +69,11 @@ function search_recursive(e: HTMLElement, term: string): boolean {
     });
 
     innerTexts.forEach(
-      (t) => (visible = text_has_search_Term(t, term) || visible)
+      (t) => (visible = text_has_search_Term(t, term) || visible),
     );
 
     console.log(
-      `id ${e.id}, searching texts: ${innerTexts}, visible=${visible}`
+      `id ${e.id}, searching texts: ${innerTexts}, visible=${visible}`,
     );
   }
 
@@ -85,7 +85,7 @@ function search_recursive(e: HTMLElement, term: string): boolean {
     children.forEach((c) => (c.style.display = "none"));
   }
   console.log(
-    `Finished ${e.id}, display: ${e.style.display}, visible=${visible}`
+    `Finished ${e.id}, display: ${e.style.display}, visible=${visible}`,
   );
 
   return visible;
@@ -94,7 +94,7 @@ function search_recursive(e: HTMLElement, term: string): boolean {
 function text_has_search_Term(
   text: string,
   term: string,
-  options: [] = []
+  options: [] = [],
 ): boolean {
   return text?.toLowerCase().includes(term);
 }
