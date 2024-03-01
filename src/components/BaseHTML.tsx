@@ -5,6 +5,7 @@ declare global {
     // Adds isParent as an accepted attribute of any html tag
     interface HtmlTag {
       ["is-parent"]?: string;
+      ["item-id"]?: string;
     }
   }
 }

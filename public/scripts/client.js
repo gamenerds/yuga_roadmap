@@ -11,15 +11,13 @@ function search() {
         console.log(`error: root element '${root_id}' not found, can't search.`);
         return;
     }
-    console.log(visibility["1-wrapper"]);
     search_recursive(root, term);
-    console.log(visibility["1-wrapper"]);
 }
 function not_empty(value) {
     return value !== null && value !== undefined;
 }
-function search_recursive(e, term) {
-    //console.log(`starting recursive for <${e.tagName} id=${e.id}>`);
+function search_recursive(e, term, item_visibility = {}) {
+    var visible = false;
     // the next step requires each element to have a unique id,
     // so let's ensure each element has one
     if (!e.id || e.id.length === 0) {
@@ -31,8 +29,7 @@ function search_recursive(e, term) {
     if (visibility[e.id] === undefined) {
         visibility[e.id] = e.style.display;
     }
-    var visible = false;
-    // using filter(not_empty) b/c typescript has no compactMap
+    // using filter(not_empty) b/c js has no compactMap
     const children = Array.from(e.children)
         .map((c) => {
         if (c instanceof HTMLElement) {
@@ -41,12 +38,13 @@ function search_recursive(e, term) {
     })
         .filter(not_empty);
     const isParent = e.attributes.getNamedItem("is-parent")?.value;
+    const item_id = e.attributes.getNamedItem("item-id");
     if (Boolean(isParent)) {
         // if we're a parent, we're visible if any children are visible
         children.forEach((c) => {
-            visible = search_recursive(c, term) || visible;
+            visible = search_recursive(c, term, item_visibility) || visible;
         });
-        console.log(`id ${e.id}, searched recursively, visible=${visible}`);
+        // console.log(`id ${e.id}, searched recursively, visible=${visible}`);
     }
     else {
         // otherwise we're visible if anything inside of us matches the search term
@@ -57,16 +55,29 @@ function search_recursive(e, term) {
             }
         });
         innerTexts.forEach((t) => (visible = text_has_search_Term(t, term) || visible));
-        console.log(`id ${e.id}, searching texts: ${innerTexts}, visible=${visible}`);
     }
-    visible = term.length === 0 || visible;
-    if (visible) {
-        children.forEach((c) => (c.style.display = visibility[e.id]));
+    if (item_id && visible) {
+        item_visibility[item_id.value] = visible;
     }
-    else {
-        children.forEach((c) => (c.style.display = "none"));
+    visible = term.trim().length === 0 || visible; // show all if search is empty string
+    // a yuga item could be represented as many html tags (div for the name, divs for dates, etc)
+    // if any of them contain the search string, then the whole yuga item should stay visible
+    var other_part_of_same_item_is_visible = false;
+    if (item_id) {
+        other_part_of_same_item_is_visible = item_visibility[item_id.value];
     }
-    console.log(`Finished ${e.id}, display: ${e.style.display}, visible=${visible}`);
+    if (visible || other_part_of_same_item_is_visible) {
+        children.forEach((c) => {
+            // keep visible all html tags that belong to this yuga item id
+            // for ex: we have a parent div container for the section + a div that shows actual section name/text
+            // so here we ensure not only the div container stays visible but also the child div that shows the name
+            // we know an html element belongs to same yuga item by checking its item-id prop
+            if (c.attributes.getNamedItem("item-id")?.value === item_id?.value) {
+                c.classList.remove("hidden");
+            }
+        });
+        e.classList.remove("hidden");
+    }
     return visible;
 }
 function text_has_search_Term(text, term, options = []) {

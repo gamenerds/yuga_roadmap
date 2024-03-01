@@ -17,7 +17,8 @@ export default function Item({
         (i2.date_delivered ? i2.date_delivered : 0),
     );
 
-  const id = id_as_string(item);
+  const element_id = id_as_string(item);
+  const item_id = String(item.id);
   const is_section = is_parent(item, subitems.length);
   const children = subitems.map((i) => (
     <Item item={i} all_items={all_items}></Item>
@@ -28,8 +29,8 @@ export default function Item({
   if (is_section) {
     output = (
       <>
-        <div id={id} is-parent={String(is_section)}>
-          <div id={id + "-name"} class="searchable">
+        <div id={element_id} is-parent={String(is_section)} item-id={item_id}>
+          <div id={element_id + "-name"} item-id={item_id} class="searchable">
             {item.name}
           </div>
           {children}
@@ -39,10 +40,10 @@ export default function Item({
   } else {
     output = (
       <>
-        <div id={id + "-name"} class="ml-10 searchable">
+        <div id={element_id + "-name"} class="ml-10 searchable" item-id={item_id}>
           {item.name} ({to_string_date(item.date_delivered)})
         </div>
-        <div id={id + "-desc"} class="ml-20 searchable">
+        <div id={element_id + "-desc"} class="ml-20 searchable" item-id={item_id}>
           ${item.desc}
         </div>
       </>
