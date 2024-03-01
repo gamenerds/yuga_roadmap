@@ -21,6 +21,7 @@ export const BaseHTML = () => {
         ></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="/scripts/client.js"></script>
+        <style>mark &#123;background-color: #D3D3D3&#125;</style>
         <title>Yuga Roadmap Status (Unofficial)</title>
       </head>
       <body class="flex justify-center">

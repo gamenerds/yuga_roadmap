@@ -32,7 +32,7 @@ export default function Item({ item, all_items }: { item: YugaItem; all_items: Y
           {item.name} ({to_string_date(item.date_delivered)})
         </div>
         <div id={element_id + "-desc"} class="searchable ml-20" item-id={item_id}>
-          ${item.desc}
+          {item.desc}
         </div>
       </>
     );

@@ -17,7 +17,7 @@ function search() {
   const dict: { [id: string]: boolean } = {};
   search_recursive(root, term, dict);
 
-  console.log(dict);
+  // console.log(dict);
 }
 
 function not_empty<T>(value: T | null | undefined): value is T {
@@ -30,6 +30,10 @@ function search_recursive(
   item_visibility: { [id: string]: boolean } = {},
 ): boolean {
   var visible = false;
+  var regex: RegExp | undefined = undefined;
+  if (term && term !== "") {
+    regex = new RegExp(term, "gi");
+  }
 
   // the next step requires each element to have a unique id,
   // so let's ensure each element has one
@@ -65,15 +69,20 @@ function search_recursive(
   } else {
     // otherwise we're visible if anything inside of us matches the search term
     var innerTexts = [e.innerText];
+    visible = elem_contains_term(e, term, regex) || visible;
+
     children.forEach((c) => {
       if (c.classList.contains(searchable_class)) {
-        innerTexts.push(c.innerText);
+        // visible = text_has_search_Term(c.innerText, term) || visible;
+        visible = elem_contains_term(c, term, regex) || visible;
+
+        // innerTexts.push(c.innerText);
       }
     });
 
-    innerTexts.forEach(
-      (t) => (visible = text_has_search_Term(t, term) || visible),
-    );
+    // innerTexts.forEach(
+    //   (t) => (visible = text_has_search_Term(t, term) || visible),
+    // );
   }
 
   if (item_id && visible) {
@@ -91,18 +100,12 @@ function search_recursive(
 
   if (visible || other_part_of_same_item_is_visible) {
     children.forEach((c) => {
-      console.log(
-        c.attributes.getNamedItem("item-id")?.value,
-        item_id?.value,
-        other_part_of_same_item_is_visible,
-      );
       // keep visible all html tags that belong to this yuga item id
       // for ex: we have a parent div container for the section + a div that shows actual section name/text
       // so here we ensure not only the div container stays visible but also the child div that shows the name
       const c_item_id = c.attributes.getNamedItem("item-id");
       if (c_item_id && item_visibility[c_item_id.value] === true) {
         c.classList.remove("hidden");
-        console.log(`We got here for ${c.id}`);
       }
     });
     e.classList.remove("hidden");
@@ -115,6 +118,27 @@ function search_recursive(
   }
 
   return visible;
+}
+
+function elem_contains_term(
+  e: HTMLElement,
+  term: string,
+  regex?: RegExp,
+  options: [] = [],
+): boolean {
+  var text = e.innerText;
+  var match: boolean = text?.toLocaleLowerCase().includes(term);
+
+  if (regex) {
+    e.innerHTML = e.innerText.replace(regex, "<mark>$&</mark>");
+  } else {
+    // clear any marks
+    let regex1 = new RegExp("<mark>", "gi");
+    let regex2 = new RegExp("</mark>", "gi");
+    e.innerHTML = e.innerHTML.replace(regex1, "").replace(regex2, "");
+  }
+
+  return match;
 }
 
 function text_has_search_Term(
