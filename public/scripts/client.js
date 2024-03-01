@@ -11,7 +11,9 @@ function search() {
         console.log(`error: root element '${root_id}' not found, can't search.`);
         return;
     }
-    search_recursive(root, term);
+    const dict = {};
+    search_recursive(root, term, dict);
+    console.log(dict);
 }
 function not_empty(value) {
     return value !== null && value !== undefined;
@@ -50,7 +52,7 @@ function search_recursive(e, term, item_visibility = {}) {
         // otherwise we're visible if anything inside of us matches the search term
         var innerTexts = [e.innerText];
         children.forEach((c) => {
-            if (c.className.includes(searchable_class)) {
+            if (c.classList.contains(searchable_class)) {
                 innerTexts.push(c.innerText);
             }
         });
@@ -68,15 +70,24 @@ function search_recursive(e, term, item_visibility = {}) {
     }
     if (visible || other_part_of_same_item_is_visible) {
         children.forEach((c) => {
+            console.log(c.attributes.getNamedItem("item-id")?.value, item_id?.value, other_part_of_same_item_is_visible);
             // keep visible all html tags that belong to this yuga item id
             // for ex: we have a parent div container for the section + a div that shows actual section name/text
             // so here we ensure not only the div container stays visible but also the child div that shows the name
-            // we know an html element belongs to same yuga item by checking its item-id prop
-            if (c.attributes.getNamedItem("item-id")?.value === item_id?.value) {
+            const c_item_id = c.attributes.getNamedItem("item-id");
+            if (c_item_id && item_visibility[c_item_id.value] === true) {
                 c.classList.remove("hidden");
+                console.log(`We got here for ${c.id}`);
             }
         });
         e.classList.remove("hidden");
+    }
+    else if (!other_part_of_same_item_is_visible) {
+        // hide as long as this item doesn't have any subitems that should be visible (satisfy the search)
+        children.forEach((c) => {
+            c.classList.add("hidden");
+        });
+        e.classList.add("hidden");
     }
     return visible;
 }

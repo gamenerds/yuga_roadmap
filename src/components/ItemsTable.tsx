@@ -8,9 +8,7 @@ export default function ItemsTable({
   top_level_items: YugaItem[];
   all_items: YugaItem[];
 }) {
-  const table = top_level_items.map((item) => (
-    <Item item={item} all_items={all_items}></Item>
-  ));
+  const table = top_level_items.map((item) => <Item item={item} all_items={all_items}></Item>);
 
   return <>{table}</>;
 }

@@ -1,0 +1,14 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "*.tsx",
+      "options": {
+        "tabWidth": 2,
+        "printWidth": 120
+      }
+    }
+  ]
+}
