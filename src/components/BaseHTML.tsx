@@ -23,26 +23,20 @@ export const BaseHTML = () => {
         <script src="/scripts/client.js"></script>
         <title>Yuga Roadmap Status (Unofficial)</title>
       </head>
-      <body class="min-h-screen flex justify-center">
-        <div class="grid grid-flow-row auto-rows-max max-w-lg m-auto">
+      <body class="flex justify-center">
+        <div class="grid grid-flow-row auto-rows-max w-2/3 m-auto">
           <div class="break-after-right">
             <input
               type="search"
               id="search"
               name="search"
               class="border border-gray-600 bg-gray-800 p-2 rounded-lg max-w-lg mb-5 break-after-all text-white"
-              placeholder="Start typing to filter/search..."
+              placeholder="Start typing to filter.."
               onkeyup="search()"
             />
           </div>
 
-          <div
-            id="results"
-            is-parent={String(true)}
-            hx-trigger="load"
-            hx-swap="innerHTML"
-            hx-get="/roadmap"
-          ></div>
+          <div id="results" is-parent={String(true)} hx-trigger="load" hx-swap="innerHTML" hx-get="/roadmap"></div>
         </div>
       </body>
     </html>
