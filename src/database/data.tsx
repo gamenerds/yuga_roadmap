@@ -16,17 +16,11 @@ export type YugaItem = {
 };
 
 export function id_as_string(item: YugaItem): string {
-  return item.parent_id === undefined
-    ? String(item.id)
-    : `${item.id}-${item.parent_id}`;
+  return item.parent_id === undefined ? String(item.id) : `${item.id}-${item.parent_id}`;
 }
 
 export function is_parent(item: YugaItem, subitem_count: number): boolean {
-  return (
-    subitem_count !== 0 ||
-    item.parent_id === undefined ||
-    item.parent_id === null
-  );
+  return subitem_count !== 0 || item.parent_id === undefined || item.parent_id === null;
 }
 
 export async function get_data(): Promise<YugaItem[]> {
@@ -34,9 +28,7 @@ export async function get_data(): Promise<YugaItem[]> {
 }
 
 async function get_real_data(): Promise<YugaItem[]> {
-  const response = await fetch(
-    `https://biwdnaleai.execute-api.ap-southeast-1.amazonaws.com/items`,
-  );
+  const response = await fetch(`https://biwdnaleai.execute-api.ap-southeast-1.amazonaws.com/items`);
   const items = await response.json();
 
   return items;

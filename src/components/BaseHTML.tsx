@@ -19,6 +19,7 @@ export const BaseHTML = () => {
           integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
           crossorigin="anonymous"
         ></script>
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="/scripts/client.js"></script>
         <style>mark &#123;background-color: #D3D3D3&#125;</style>
