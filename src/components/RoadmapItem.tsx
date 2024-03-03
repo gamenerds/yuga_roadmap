@@ -1,8 +1,9 @@
 import { JsxElement } from "typescript";
 import { YugaItem, is_parent, id_as_string } from "../database/data";
 import { to_string_date } from "../utils/utils";
+import RoadmapDate from "./RodmapDate";
 
-export default function Item({ item, all_items }: { item: YugaItem; all_items: YugaItem[] }) {
+export default function RoadmapItem({ item, all_items }: { item: YugaItem; all_items: YugaItem[] }) {
   const subitems = all_items
     .filter((i) => i.parent_id === item.id)
     .sort((i1, i2) => (i1.date_delivered ? i1.date_delivered : 0) - (i2.date_delivered ? i2.date_delivered : 0));
@@ -10,7 +11,7 @@ export default function Item({ item, all_items }: { item: YugaItem; all_items: Y
   const element_id = id_as_string(item);
   const item_id = String(item.id);
   const is_parent_item = is_parent(item, subitems.length);
-  const children = subitems.map((i) => <Item item={i} all_items={all_items}></Item>);
+  const children = subitems.map((i) => <RoadmapItem item={i} all_items={all_items}></RoadmapItem>);
 
   var output: JSX.Element;
 
@@ -37,8 +38,8 @@ export default function Item({ item, all_items }: { item: YugaItem; all_items: Y
             <span id={element_id + "-name"} class="searchable float-left">
               {item.name}
             </span>{" "}
-            <span id={element_id + "-date"} class="searchable float-right">
-              {to_string_date(item.date_delivered)}
+            <span id={element_id + "-date"} class="float-right">
+              <RoadmapDate item={item}></RoadmapDate>
             </span>
           </div>
           <div id={element_id + "-content"} item-id={item_id} class="collapse-content ml-10">

@@ -10,9 +10,9 @@ export type YugaItem = {
   link?: string;
   date_delivered?: number;
   date_delivered_end?: number;
-  date_estimated?: number;
   date_promised_original?: number;
   date_promised_latest?: number;
+  date_promised_as_string?: string;
 };
 
 export function id_as_string(item: YugaItem): string {
@@ -81,7 +81,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       media: "",
       date_delivered: 1635638400,
       date_delivered_end: 1635983999,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -94,7 +93,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       media: "",
       date_delivered: 1655683200,
       date_delivered_end: 1656028799,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -108,7 +106,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       link: "https://news.yuga.com/apes-come-home",
       date_delivered: 1709164800,
       date_delivered_end: 0,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -122,7 +119,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       link: "https://www.larvalabs.com/blog/2022-3-11-18-0/yuga-labs-acquires-cryptopunks-and-meebits",
       date_delivered: 1646956800,
       date_delivered_end: 0,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -136,7 +132,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       link: "https://nftnow.com/news/yuga-labs-acquires-proof/",
       date_delivered: 1708214400,
       date_delivered_end: 0,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -150,7 +145,6 @@ async function get_test_data(): Promise<YugaItem[]> {
       link: "https://bitcoinmagazine.com/culture/yuga-labs-introduces-first-bitcoin-ordinals-collection",
       date_delivered: 1677542400,
       date_delivered_end: 0,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -164,9 +158,22 @@ async function get_test_data(): Promise<YugaItem[]> {
       link: "https://nftnow.com/news/yuga-labs-bitcoin-ordinals-twelvefold-cipher-puzzles/",
       date_delivered: 1677542400,
       date_delivered_end: 0,
-      date_estimated: 0,
       date_promised_original: 0,
       date_promised_latest: 0,
+    },
+    {
+      id: 14,
+      parent_id: 3,
+      name: "Dookey Dash Unclogged",
+      desc: "The web2 version of Dookey Dash for the masses.",
+      thumbnail: "",
+      media: "",
+      link: "https://news.yuga.com/apes-come-home",
+      date_delivered: 0,
+      date_delivered_end: 0,
+      date_promised_original: 0,
+      date_promised_latest: 0,
+      date_promised_as_string: "Spring 2024",
     },
   ];
 }

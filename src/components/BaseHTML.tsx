@@ -1,4 +1,5 @@
 import { YugaItem } from "../database/data";
+import ItemsTable from "./RoadmapItems";
 
 declare global {
   namespace JSX {
@@ -43,20 +44,7 @@ export const BaseHTML = () => {
         <title>Yuga Roadmap Status (Unofficial)</title>
       </head>
       <body class="flex justify-center">
-        <div class="grid grid-flow-row auto-rows-max w-2/3 max-w-3xl m-auto">
-          <div class="break-after-right">
-            <input
-              type="search"
-              id="search"
-              name="search"
-              class="border border-gray-600 bg-gray-800 p-2 rounded-lg max-w-lg mb-5 break-after-all text-white"
-              placeholder="Start typing to filter.."
-              onkeyup="search()"
-            />
-          </div>
-
-          <div id="results" is-parent={String(true)} hx-trigger="load" hx-swap="innerHTML" hx-get="/roadmap"></div>
-        </div>
+        <div hx-trigger="load" hx-swap="innerHTML" hx-get="/roadmap" class="w-2/3 max-w-3xl"></div>
       </body>
     </html>
   );

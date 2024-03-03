@@ -4,36 +4,40 @@ import { html } from "@elysiajs/html";
 import { YugaItem } from "./src/database/data";
 import { get_data } from "./src/database/data";
 import { BaseHTML } from "./src/components/BaseHTML";
-import ItemsTable from "./src/components/ItemsTable";
+import RoadmapItems from "./src/components/RoadmapItems";
+
+enum items_sort_type { "category", "date" }
 
 const app = new Elysia()
   .use(staticPlugin({ prefix: "/" }))
   .use(html())
   .get("/", () => <BaseHTML></BaseHTML>)
-  .get("/roadmap", () => itemsHTML())
+  .get("/roadmap", () => roadmap_items_page())
   .listen(3000);
 
 console.log(`🦊 listening on ${app.server?.hostname}: ${app.server?.port}`);
 
-async function itemsHTML(): Promise<JSX.Element> {
-  return get_data().then(
-    (items) => build_html(items),
+function roadmap_items_page(): Promise<JSX.Element> {
+  return get_sorted_items(items_sort_type.category).then(
+    (items) => roadmap_items_html(items),
     (reason) => {
       return `Could not retrieve items from database. Reason: ${reason}`;
     },
   );
 }
 
-function build_html(all_items: YugaItem[]): JSX.Element {
-  //const all_items_sorted = items
-  const top_level_items = all_items
-    .filter((i) => !i.parent_id)
-    .sort((i1, i2) => i1.id - i2.id);
+function get_sorted_items(sort_type: items_sort_type): Promise<YugaItem[]> {
+  var items = get_data();
 
+
+
+  return items;
+}
+
+function roadmap_items_html(all_items: YugaItem[]): JSX.Element {
   return (
-    <ItemsTable
-      top_level_items={top_level_items}
+    <RoadmapItems
       all_items={all_items}
-    ></ItemsTable>
+    ></RoadmapItems>
   );
 }
