@@ -17,12 +17,12 @@ export default function Item({ item, all_items }: { item: YugaItem; all_items: Y
   if (is_parent_item) {
     output = (
       <>
-        <div id={element_id} is-parent={String(is_parent_item)} item-id={item_id} class="collapse">
+        <div id={element_id} is-parent={String(is_parent_item)} item-id={item_id} class="collapse content-start">
           <input type="checkbox" checked />
           <div id={element_id + "-name"} item-id={item_id} class="searchable collapse-title text-lg font-bold">
             {item.name}
           </div>
-          <div id={element_id + "-content"} class="collapse-content" item-id={item_id}>
+          <div id={element_id + "-content"} class="collapse-content ml-10" item-id={item_id}>
             {children}
           </div>
         </div>
@@ -31,18 +31,18 @@ export default function Item({ item, all_items }: { item: YugaItem; all_items: Y
   } else {
     output = (
       <>
-        <div id={element_id} is-parent={String(is_parent_item)} item-id={item_id} class="collapse">
+        <div id={element_id} is-parent={String(is_parent_item)} item-id={item_id} class="collapse content-start">
           <input type="checkbox" checked />
-          <div class="collapse-title ml-10" item-id={item_id}>
-            <span id={element_id + "-name"} class="searchable">
+          <div class="collapse-title" item-id={item_id}>
+            <span id={element_id + "-name"} class="searchable float-left">
               {item.name}
             </span>{" "}
-            <span id={element_id + "-date"} class="searchable">
-              ({to_string_date(item.date_delivered)})
+            <span id={element_id + "-date"} class="searchable float-right">
+              {to_string_date(item.date_delivered)}
             </span>
           </div>
-          <div id={element_id + "-content"} item-id={item_id} class="collapse-content">
-            <div id={element_id + "-desc"} class="searchable ml-20" item-id={item_id}>
+          <div id={element_id + "-content"} item-id={item_id} class="collapse-content ml-10">
+            <div id={element_id + "-desc"} class="searchable" item-id={item_id}>
               {item.desc}
             </div>
           </div>

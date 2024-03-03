@@ -22,11 +22,28 @@ export const BaseHTML = () => {
         <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="/scripts/client.js"></script>
-        <style>mark &#123;background-color: #D3D3D3&#125;</style>
+        <style>
+          mark &#123;background-color: #D3D3D3;&#125;
+          .collapse-title, input[type=checkbox] &#123;
+            min-height: 2rem;
+            padding: 0.2rem;
+          &#125;
+          .collapse-content &#123;
+            min-height: 1.75rem;
+          &#125;
+          .collapse:not(.collapse-open)&gt;.collapse-content &#123;
+            min-height: 0rem;
+            padding: 0.2rem;
+            padding-bottom: 0.5rem;
+          &#125;
+          .collapse:not(.collapse-close)&gt;:where(input[type=checkbox]:checked ~ .collapse-content) &#123;
+            padding-bottom: 0.5rem;
+          &#125;
+        </style>
         <title>Yuga Roadmap Status (Unofficial)</title>
       </head>
       <body class="flex justify-center">
-        <div class="grid grid-flow-row auto-rows-max w-2/3 m-auto">
+        <div class="grid grid-flow-row auto-rows-max w-2/3 max-w-3xl m-auto">
           <div class="break-after-right">
             <input
               type="search"
