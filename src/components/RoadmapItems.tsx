@@ -1,4 +1,4 @@
-import { YugaItem } from "../database/data";
+import { YugaItem } from "../database/database";
 import RoadmapItem from "./RoadmapItem";
 
 export default function RoadmapItems({ all_items,}: { all_items: YugaItem[]; }) {

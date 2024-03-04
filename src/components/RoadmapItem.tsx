@@ -1,12 +1,11 @@
 import { JsxElement } from "typescript";
-import { YugaItem, is_parent, id_as_string } from "../database/data";
+import { YugaItem, is_parent, id_as_string } from "../database/database";
 import { to_string_date } from "../utils/utils";
 import RoadmapDate from "./RodmapDate";
 
 export default function RoadmapItem({ item, all_items }: { item: YugaItem; all_items: YugaItem[] }) {
   const subitems = all_items
-    .filter((i) => i.parent_id === item.id)
-    .sort((i1, i2) => (i1.date_delivered ? i1.date_delivered : 0) - (i2.date_delivered ? i2.date_delivered : 0));
+    .filter((i) => i.parent_id === item.id);
 
   const element_id = id_as_string(item);
   const item_id = String(item.id);

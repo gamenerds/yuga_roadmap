@@ -1,8 +1,8 @@
 import { Elysia } from "elysia";
 import { staticPlugin } from "@elysiajs/static";
 import { html } from "@elysiajs/html";
-import { SORT_TYPE, YugaItem } from "./src/database/data";
-import { get_data } from "./src/database/data";
+import { SORT_TYPE, YugaItem } from "./src/database/database";
+import { get_data } from "./src/database/database";
 import { BaseHTML } from "./src/components/BaseHTML";
 import RoadmapItems from "./src/components/RoadmapItems";
 

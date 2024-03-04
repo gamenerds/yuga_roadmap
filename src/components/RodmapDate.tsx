@@ -1,4 +1,4 @@
-import { YugaItem } from "../database/data";
+import { YugaItem } from "../database/database";
 import { to_string_date } from "../utils/utils";
 
 export default function RoadmapDate({ item }: { item: YugaItem }) {

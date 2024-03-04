@@ -1,4 +1,4 @@
-import { YugaItem } from "../database/data";
+import { YugaItem } from "../database/database";
 import ItemsTable from "./RoadmapItems";
 
 declare global {

@@ -1,117 +1,6 @@
-const USE_TEST_DATA = true;
+import { YugaItem } from "./database";
 
-export type YugaItem = {
-  id: number;
-  parent_id?: number;
-  name: string;
-  desc?: string;
-  thumbnail?: string;
-  media?: string;
-  link?: string;
-  date_delivered?: number;
-  date_delivered_end?: number;
-  date_promised_original?: number;
-  date_promised_latest?: number;
-  date_promised_as_string?: string;
-  date_for_sorting?: number;
-};
-
-export enum SORT_TYPE { "by_category", "by_date" };
-
-export function id_as_string(item: YugaItem): string {
-  return item.parent_id === undefined ? String(item.id) : `${item.id}-${item.parent_id}`;
-}
-
-export function is_parent(item: YugaItem, subitem_count: number): boolean {
-  return subitem_count !== 0 || item.parent_id === undefined || item.parent_id === null;
-}
-
-export async function get_data(sort: SORT_TYPE): Promise<YugaItem[]> {
-  let items = USE_TEST_DATA ? await get_test_data() : await get_real_data();
-
-  switch (sort) {
-    case SORT_TYPE.by_date: {
-      return organized_items_by_date(items);
-    }
-    default: {
-      return items; 
-    }
-  }
-}
-
-function organized_items_by_date(items: YugaItem[]): YugaItem[] {
-  var organized_items: YugaItem[] = [];
-  
-  // pick a date to be used for sorting purposes
-  items.forEach((i) => {
-    if (i.date_delivered) {
-      i.date_for_sorting = i.date_delivered;
-    } else if (i.date_promised_original) {
-      i.date_for_sorting = i.date_promised_original;
-    } else if (i.date_promised_latest) {
-      i.date_for_sorting = i.date_promised_latest;
-    }
-  });
-
-  // this is a bad way to filter out sections.
-  // TODO: refactor to allow for items that don't have a date but also aren't a section
-  // maybe by adding is_section to YugaItem? 
-  // (this is due to our mosachistic choice to support n - levels of item hierarchy instead of just 2: section -> item)
-  const non_section_items = items.filter(i => i.date_for_sorting !== undefined);
-
-  // sort by that date
-  non_section_items.sort((i1, i2) => i1.date_for_sorting && i2.date_for_sorting ? i2.date_for_sorting - i1.date_for_sorting : 0);
-
-  // extract top-level items from the data (the years)
-  var years: YugaItem[] = [];
-  non_section_items.forEach((i) => {
-    var year_as_string: string = "?"
-
-    if (i.date_for_sorting) {
-      year_as_string = String(new Date(i.date_for_sorting * 1000).getFullYear());
-    }
-
-    var item_for_this_year = years.find((i) => i.name === year_as_string);
-    if (!item_for_this_year) {
-      item_for_this_year = {
-        id: years.length + 1,
-        name: year_as_string
-      };
-      years.push(item_for_this_year);
-    }
-    i.name = top_parent_of(i, items).name + ": " + i.name;
-
-    // assign new parent id, which is id of the section for the year the item belongs to
-    i.parent_id = item_for_this_year.id;
-  });
-
-  organized_items = years.concat(non_section_items);
-  // console.log(organized_items);
-    
-  return organized_items;
-}
-
-function top_parent_of(item: YugaItem, all_items: YugaItem[]): YugaItem {
-  console.log(`looking for parent of item.id ${item.id}, parent_id: ${item.parent_id}`);
-  if (item.parent_id) {
-    let parent = all_items.findLast(i => i.id === item.parent_id);
-    if (parent) {
-      return top_parent_of(parent, all_items);
-    }
-  }
-
-  console.log(`the parent is id: ${item.id}, name: ${item.name} `);
-  return item;
-}
-
-async function get_real_data(): Promise<YugaItem[]> {
-  const response = await fetch(`https://biwdnaleai.execute-api.ap-southeast-1.amazonaws.com/items`);
-  const items = await response.json();
-
-  return items;
-}
-
-async function get_test_data(): Promise<YugaItem[]> {
+export default function get_test_data(): YugaItem[] {
   return [
     {
       id: 1,
@@ -233,8 +122,8 @@ async function get_test_data(): Promise<YugaItem[]> {
       thumbnail: "",
       media: "",
       link: "https://nftnow.com/news/yuga-labs-bitcoin-ordinals-twelvefold-cipher-puzzles/",
-      date_delivered: 1677542400,
-      date_delivered_end: 0,
+      date_delivered: 1693872000,
+      date_delivered_end: 1702339200,
       date_promised_original: 0,
       date_promised_latest: 0,
     },
@@ -251,6 +140,44 @@ async function get_test_data(): Promise<YugaItem[]> {
       date_promised_original: 1709251200,
       date_promised_latest: 0,
       date_promised_as_string: "Spring 2024",
+      },
+    {
+      id: 15,
+      parent_id: 2,
+      name: "Trip #1",
+      desc: "The first trip to the Otherside where apes followed Curtis around and then performed the first world boss kill.",
+      thumbnail: "",
+      media: "https://www.youtube.com/watch?v=x81Eudpc444",
+      link: "https://www.youtube.com/watch?v=x81Eudpc444",
+      date_delivered: 1657929600,
+      date_delivered_end: 0,
+      date_promised_original: 0,
+      date_promised_latest: 0,
+    },
+    {
+      id: 16,
+      parent_id: 2,
+      name: "Trip #2",
+      desc: "The second trip to the Otherside showcased a few different land/plot types. Apes split up into three teams for a game, with members of the blue team winning and securing a the first Otherside wearable (a helmet) as a reward that was airdropped later.",
+      thumbnail: "",
+      media: "https://www.youtube.com/watch?v=_RmFWo9Htwg",
+      link: "https://www.youtube.com/watch?v=_RmFWo9Htwg",
+      date_delivered: 1679702400,
+      date_delivered_end: 0,
+      date_promised_original: 0,
+      date_promised_latest: 0,
+    },
+    {
+      id: 17,
+      parent_id: 1,
+      name: "Apefest #3 (Hong Kong)",
+      desc: "The third Apefest was held in Hong Kong between Nov 3 - 5, 2023 for verified apes and mutants only (and their +1s). It showcased Made by Apes (products and companies created by club members), limited quantities of BAPE merchandise collab, and a huge venue at Kai Tak terminal. Magic Eden partnership was also announced here.",
+      thumbnail: "",
+      media: "",
+      date_delivered: 1698969600,
+      date_delivered_end: 1699228799,
+      date_promised_original: 0,
+      date_promised_latest: 0,
     },
   ];
 }
