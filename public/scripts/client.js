@@ -65,7 +65,7 @@ function search_recursive(e, term, regex) {
 }
 function elem_contains_term(e, term, regex, options = []) {
     var match = e.innerText?.toLowerCase().includes(term);
-    if (match) {
+    if (term !== "" && term !== undefined && match) {
         e.innerHTML = e.innerText?.replace(regex, "<mark>$&</mark>");
     }
     else {

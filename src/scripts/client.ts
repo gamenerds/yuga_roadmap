@@ -89,7 +89,7 @@ function elem_contains_term(
 ): boolean {
   var match: boolean = e.innerText?.toLowerCase().includes(term);
 
-  if (match) {
+  if (term !== "" && term !== undefined && match) {
     e.innerHTML = e.innerText?.replace(regex, "<mark>$&</mark>");
   } else {
     // clear any marks
